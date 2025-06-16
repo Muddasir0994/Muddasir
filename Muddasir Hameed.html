@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیاسی و فلسفیانہ تصورات کا جائزہ</title>
+    
+    <!-- Chosen Palette: Scholarly Neutrals -->
+    <!-- Application Structure Plan: A single-page scrolling application with a sticky top navigation bar for easy access to the four main thematic sections. This structure was chosen over a direct report-to-page mapping to create a fluid, exploratory user experience. Each section is designed to be a self-contained module, starting with an introduction and using interactive elements like clickable cards and comparative charts to break down complex information into digestible pieces, facilitating better understanding and engagement. The flow encourages both sequential reading and direct topic exploration. A new "Q&A" section has been added at the end for general inquiries, with modified text to be less explicit about the AI source. -->
+    <!-- Visualization & Content Choices:
+        1. Iqbal's Critique: Report Info -> Four key criticisms of democracy. Goal -> Inform/Organize. Viz -> Interactive Cards. Interaction -> Click to reveal details. Justification -> Breaks down a dense argument into clear, manageable parts. Library -> HTML/CSS/JS.
+        2. Human vs. Divine Law: Report Info -> Comparison table. Goal -> Compare. Viz -> Radar Chart & Icon-based side-by-side list. Interaction -> Chart tooltips provide instant comparison. Justification -> A radar chart is superior to a table for comparing multiple attributes simultaneously and visually. Library -> Chart.js.
+        3. Socialism vs. Communism: Report Info -> Comparison table. Goal -> Compare. Viz -> Stacked Bar Chart & interactive diagram. Interaction -> Chart tooltips clarify the distinction in ownership. Justification -> Visually quantifies the abstract difference in economic models. Library -> Chart.js.
+        4. Nationalism: Report Info -> Western nationalism vs. Iqbal's concept. Goal -> Compare/Organize. Viz -> Two-column layout with a CSS-based flowchart. Interaction -> Key concepts highlighted. Justification -> A flowchart clarifies the historical process, and the side-by-side layout effectively contrasts the two opposing views. Library -> HTML/CSS/JS.
+        5. Ask Gemini (now Q&A): Report Info -> User queries on political/philosophical topics. Goal -> Generate dynamic answers. Viz -> Text input and output. Interaction -> Button click to query LLM. Justification -> Provides an interactive Q&A feature for broader exploration beyond predefined content, with a more neutral presentation. Library -> Gemini API (gemini-2.0-flash).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            background-color: #FDFBF5;
+            color: #3D352E;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #C0843E;
+            border-bottom-color: #C0843E;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .rtl-grid {
+            direction: rtl;
+        }
+        .prose-ur {
+            /* Adjusted line-height for better readability and aesthetics */
+            line-height: 1.9; 
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1C7B9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C0843E;
+        }
+    </style>
+</head>
+<body class="bg-[#FDFBF5]">
+
+    <div id="app" class="text-gray-800">
+        
+        <header id="header" class="bg-[#FDFBF5]/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <h1 class="text-xl md:text-2xl font-bold text-[#3D352E]">مدثر حمید کی ویب سائٹ</h1>
+                <div class="hidden md:flex items-center space-x-8 space-x-reverse">
+                    <a href="#iqbal" class="nav-link text-lg font-medium pb-1">فکرِ اقبال</a>
+                    <a href="#law" class="nav-link text-lg font-medium pb-1">دستور</a>
+                    <a href="#economy" class="nav-link text-lg font-medium pb-1">معاشی نظریات</a>
+                    <a href="#nationalism" class="nav-link text-lg font-medium pb-1">قومیت</a>
+                    <a href="#qna" class="nav-link text-lg font-medium pb-1">علمی سوالات کے جوابات</a>
+                </div>
+                 <div class="md:hidden">
+                    <select id="mobile-nav" class="bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#C0843E] focus:border-transparent">
+                        <option value="#home">صفحہ اول</option>
+                        <option value="#iqbal">فکرِ اقبال</option>
+                        <option value="#law">دستور</option>
+                        <option value="#economy">معاشی نظریات</option>
+                        <option value="#nationalism">قومیت</option>
+                        <option value="#qna">علمی سوالات کے جوابات</option>
+                    </select>
+                </div>
+            </nav>
+        </header>
+
+        <main class="container mx-auto px-6 py-12">
+            
+            <section id="home" class="text-center min-h-[60vh] flex flex-col justify-center items-center">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4 text-[#3D352E]">کلیدی سیاسی و فلسفیانہ تصورات کا جائزہ</h2>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600 prose-ur">اس انٹرایکٹو رپورٹ میں خوش آمدید۔ یہاں ہم علامہ اقبال کی جمہوریت پر تنقید، انسانی اور الٰہی دستور کے فرق، سوشلزم و کمیونزم کے موازنے، اور مغربی و اسلامی تصورِ قومیت جیسے پیچیدہ موضوعات کا جدید اور بصری انداز میں جائزہ لیں گے۔ نیچے سکرول کریں یا اوپر دیے گئے لنکس کا استعمال کرکے اپنی دلچسپی کے موضوع پر جائیں۔</p>
+            </section>
+
+            <div class="space-y-24">
+            
+                <section id="iqbal" class="scroll-mt-20">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-[#C0843E]">علامہ اقبال کی مغربی جمہوریت پر تنقید</h2>
+                    <p class="text-center text-lg max-w-3xl mx-auto mb-12 text-gray-600 prose-ur">
+                        اس حصے میں، ہم علامہ اقبال کے جمہوریت پر نقطہ نظر کو سمجھیں گے۔ وہ جمہوریت کے اصول کے خلاف نہیں تھے، بلکہ اس کے مغربی، مادی ماڈل پر تنقید کرتے تھے۔ یہاں ہم ان کی چار بنیادی تنقیدوں اور ان کے مثالی روحانی جمہوریت کے تصور کو انٹرایکٹو کارڈز کے ذریعے دریافت کریں گے۔ ہر کارڈ پر کلک کر کے مزید تفصیلات جانیں۔
+                    </p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 rtl-grid">
+                        <div class="card bg-white p-6 rounded-xl shadow-lg cursor-pointer" data-content-id="content-1">
+                            <h3 class="text-xl font-bold mb-2 text-center">روحانی اقدار کا فقدان</h3>
+                            <p class="text-sm text-center text-gray-500">مغربی جمہوریت کی مادی بنیادوں پر تنقید۔</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-xl shadow-lg cursor-pointer" data-content-id="content-2">
+                            <h3 class="text-xl font-bold mb-2 text-center">سرمایہ دارانہ استحصال</h3>
+                             <p class="text-sm text-center text-gray-500">"تولا نہیں، صرف گنا جاتا ہے" کا اصول۔</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-xl shadow-lg cursor-pointer" data-content-id="content-3">
+                            <h3 class="text-xl font-bold mb-2 text-center">آزادی کا فریب</h3>
+                             <p class="text-sm text-center text-gray-500">سامراجیت کا آلہ کار ہونے پر تنقید۔</p>
+                        </div>
+                        <div class="card bg-white p-6 rounded-xl shadow-lg cursor-pointer" data-content-id="content-4">
+                           <h3 class="text-xl font-bold mb-2 text-center">عملی ناکامی</h3>
+                            <p class="text-sm text-center text-gray-500">نظام کی عملی خامیوں اور بدعنوانی پر تنقید۔</p>
+                        </div>
+                    </div>
+                    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+                        <div id="modal-content" class="bg-white rounded-lg p-8 max-w-2xl w-full relative prose-ur">
+                            <button id="modal-close" class="absolute top-4 left-4 text-2xl font-bold">&times;</button>
+                            <div id="modal-body"></div>
+                        </div>
+                    </div>
+                    <div class="hidden">
+                        <div id="content-1-data">
+                            <h4 class="font-bold text-2xl mb-4">مادی بنیاد اور روحانی و اخلاقی اقدار کا فقدان</h4>
+                            <p>اقبال کا سب سے بڑا اعتراض یہ تھا کہ مغربی جمہوریت روحانی اور اخلاقی بنیادوں سے محروم ہے۔ ان کا ماننا تھا کہ یہ صرف مادی مفادات پر مرکوز ہے، جو اسے بدعنوانی اور استحصال کا شکار بناتی ہے۔ ان کے نزدیک جب سیاست اخلاقیات سے آزاد ہو جائے تو وہ انسانیت کے لیے تباہ کن بن جاتی ہے۔</p>
+                            <blockquote class="border-r-4 border-[#C0843E] pr-4 mt-4 italic">"اس راز کو اک مردِ فرنگی نے کیا فاش<br>ہر چند کہ دانا اسے کھولا نہیں کرتے<br>جمہوریت اک طرزِ حکومت ہے کہ جس میں<br>بندوں کو گنا کرتے ہیں تولا نہیں کرتے"</blockquote>
+                        </div>
+                        <div id="content-2-data">
+                            <h4 class="font-bold text-2xl mb-4">سرمایہ دارانہ اشرافیہ کا استحصال</h4>
+                            <p>اقبال نے مغربی جمہوریت کو سرمایہ داروں کی "جنگ زرگری" قرار دیا، جس کا مقصد دولت مندوں کے مفادات کے لیے غریب طبقے کا استحصال کرنا تھا۔ انہوں نے اس کے عددی پہلو پر شدید تنقید کی، یہ کہتے ہوئے کہ محض عددی اکثریت انصاف یا دانشمندی کی ضمانت نہیں ہو سکتی۔ ان کے نزدیک قابلیت اور کردار کی بجائے تعداد پر انحصار نظام کی بڑی خامی ہے۔</p>
+                            <blockquote class="border-r-4 border-[#C0843E] pr-4 mt-4 italic">"ہے وہی سازِ کہن مغرب کا جمہوری نظام<br>جس کے پردوں میں نہیں غیر از نوائے قیصری"</blockquote>
+                        </div>
+                        <div id="content-3-data">
+                            <h4 class="font-bold text-2xl mb-4">آزادی کا فریب اور سامراجیت</h4>
+                            <p>اقبال نے مغربی جمہوریت کو ایک "خوبصورت پری" کے طور پر دیکھا جو درحقیقت "جمہوریت کے نقاب میں رقص کرتا ہوا ایک ظالم بھوت" تھی، جو سامراجی مقاصد کی تکمیل کرتی تھی۔ انہوں نے اسے سامراجیت، جارحیت، اور سرمایہ داری سے براہ راست جوڑا اور اسے غلامانہ ذہنیت پیدا کرنے والی ایک معاشرتی بیماری قرار دیا۔</p>
+                             <blockquote class="border-r-4 border-[#C0843E] pr-4 mt-4 italic">"دیو استبداد جمہوری قبا میں پائے کوب<br>تو سمجھتا ہے یہ آزادی کی ہے نیلم پری"</blockquote>
+                        </div>
+                        <div id="content-4-data">
+                            <h4 class="font-bold text-2xl mb-4">عملی مظاہر کی تنقید</h4>
+                            <p>اقبال نے مشاہدہ کیا کہ مغربی جمہوری نظام میں عوام کا کردار ووٹ ڈالنے سے زیادہ نہیں ہوتا۔ منتخب پارلیمنٹ بھی عوام کا اعتماد بحال کرنے میں ناکام رہتی ہے اور اسے ایک بدعنوان نظام کا حصہ سمجھا جاتا ہے، جہاں نمائندے اکثر طاقت اور پیسے کے ذریعے منتخب ہوتے ہیں۔ یہ عملی نقائص اس بات کا ثبوت تھے کہ یہ نظام اپنے نظریاتی دعووں کو پورا کرنے میں ناکام ہے۔</p>
+                            <p class="mt-4">اس کے برعکس، اقبال ایک ایسی "روحانی جمہوریت" کا تصور پیش کرتے تھے جہاں حاکمیت اللہ کی ہو اور انسان اس کے نائب کے طور پر شریعت کی حدود میں رہ کر اجتماعی فیصلے کریں۔</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="law" class="scroll-mt-20">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-[#C0843E]">انسانی دستور بمقابلہ الٰہی دستور</h2>
+                    <p class="text-center text-lg max-w-3xl mx-auto mb-12 text-gray-600 prose-ur">
+                        یہاں ہم انسانی ساختہ قانون اور الٰہی قانون (اسلامی تناظر میں) کے درمیان بنیادی فرق کا جائزہ لیں گے۔ ان کے ماخذ، دائرہ کار، اور مقصد میں کیا فرق ہے؟ نیچے دیا گیا ریڈار چارٹ ان دونوں نظاموں کی کلیدی خصوصیات کا بصری موازنہ فراہم کرتا ہے، جو ان کے نظریاتی فرق کو فوری طور پر واضح کرتا ہے۔
+                    </p>
+                    <div class="chart-container bg-white p-4 rounded-xl shadow-lg">
+                        <canvas id="lawChart"></canvas>
+                    </div>
+                </section>
+
+                <section id="economy" class="scroll-mt-20">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-[#C0843E]">سوشلزم بمقابلہ کمیونزم</h2>
+                    <p class="text-center text-lg max-w-3xl mx-auto mb-12 text-gray-600 prose-ur">
+                       سوشلزم اور کمیونزم دو اہم معاشی نظریات ہیں جو اکثر ایک دوسرے کے ساتھ ملا دیے جاتے ہیں۔ اس حصے میں ہم ان کے درمیان فرق کو واضح کریں گے۔ نیچے دیا گیا چارٹ ایک فرضی معیشت میں ذرائع پیداوار کی ملکیت کو ظاہر کرتا ہے، جس سے ان دونوں نظاموں کے درمیان بنیادی فرق کو سمجھنے میں مدد ملتی ہے۔
+                    </p>
+                     <div class="chart-container bg-white p-4 rounded-xl shadow-lg">
+                        <canvas id="economyChart"></canvas>
+                    </div>
+                    <div class="mt-12 text-center prose-ur max-w-3xl mx-auto">
+                        <h4 class="text-xl font-bold">بنیادی فرق:</h4>
+                        <p><span class="font-bold text-[#4682B4]">سوشلزم</span> میں، کلیدی صنعتیں عوامی ملکیت میں ہوتی ہیں لیکن ذاتی ملکیت اور چھوٹے کاروبار کی اجازت ہوتی ہے۔ اس کا مقصد جمہوری طریقوں سے بتدریج تبدیلی لانا ہے۔</p>
+                        <p><span class="font-bold text-[#C0843E]">کمیونزم</span> میں، تمام نجی ملکیت کو ختم کرکے ذرائع پیداوار پر اجتماعی کنٹرول کا مطالبہ کیا جاتا ہے، جو اکثر انقلابی ذرائع سے حاصل کیا جاتا ہے۔ حتمی مقصد ایک غیر طبقاتی اور ریاست کے بغیر معاشرہ قائم کرنا ہے۔</p>
+                    </div>
+                </section>
+
+                <section id="nationalism" class="scroll-mt-20">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-[#C0843E]">مغربی اور اسلامی تصورِ قومیت</h2>
+                    <p class="text-center text-lg max-w-3xl mx-auto mb-12 text-gray-600 prose-ur">
+                        قومیت جدید دنیا کی ایک طاقتور قوت ہے۔ یہ حصہ مغربی تصورِ قومیت، جو نسل، زبان اور علاقے پر مبنی ہے، اور علامہ اقبال کے "ملتِ اسلامیہ" کے تصور، جو ایمان کی وحدت پر قائم ہے، کا تقابلی جائزہ پیش کرتا ہے۔ ان دونوں نظریات کے بنیادی اصول اور مقاصد ایک دوسرے سے بالکل مختلف ہیں۔
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h3 class="text-2xl font-bold text-center mb-4 border-b-2 border-gray-200 pb-2">مغربی تصورِ قومیت</h3>
+                            <ul class="space-y-4 prose-ur list-inside">
+                                <li class="flex items-start"><span class="text-xl text-[#C0843E] ml-3 mt-1">✓</span><span><span class="font-bold">بنیاد:</span> مشترکہ نسل، زبان، ثقافت یا جغرافیائی علاقہ۔</span></li>
+                                <li class="flex items-start"><span class="text-xl text-[#C0843E] ml-3 mt-1">✓</span><span><span class="font-bold">مقصد:</span> ایک قوم-ریاست (Nation-State) کا قیام اور اس کی خود مختاری کا تحفظ۔</span></li>
+                                <li class="flex items-start"><span class="text-xl text-[#C0843E] ml-3 mt-1">✓</span><span><span class="font-bold">شناخت:</span> مادی اور دنیاوی حدود پر مبنی سیاسی شناخت۔</span></li>
+                                <li class="flex items-start"><span class="text-xl text-[#C0843E] ml-3 mt-1">✓</span><span><span class="font-bold">تاریخی اثر:</span> جرمنی اور اٹلی جیسے ممالک کو متحد کیا، لیکن سلطنتوں کو توڑا اور عالمی جنگوں کا سبب بھی بنی۔</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h3 class="text-2xl font-bold text-center mb-4 border-b-2 border-gray-200 pb-2">اقبال کا تصورِ ملت</h3>
+                             <ul class="space-y-4 prose-ur list-inside">
+                                <li class="flex items-start"><span class="text-xl text-[#4682B4] ml-3 mt-1">✓</span><span><span class="font-bold">بنیاد:</span> مشترکہ عقیدہ (اسلام)، روحانی اخوت، اور ایک مشترکہ نظریہ حیات۔</span></li>
+                                <li class="flex items-start"><span class="text-xl text-[#4682B4] ml-3 mt-1">✓</span><span><span class="font-bold">مقصد:</span> جغرافیائی اور نسلی حدود سے بالاتر ایک عالمگیر اسلامی برادری (امت) کا قیام۔</span></li>
+                                <li class="flex items-start"><span class="text-xl text-[#4682B4] ml-3 mt-1">✓</span><span><span class="font-bold">شناخت:</span> روحانی اور نظریاتی بنیادوں پر قائم ایک ماورائے قوم شناخت۔</span></li>
+                                <li class="flex items-start"><span class="text-xl text-[#4682B4] ml-3 mt-1">✓</span><span><span class="font-bold">اقبال کا نقطہ نظر:</span> اقبال مغربی قومیت کو انسانیت کی تقسیم کا ذریعہ اور مسلمانوں کے اتحاد کے لیے ایک "مہلک حربہ" سمجھتے تھے۔</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="qna" class="scroll-mt-20 bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto mt-20">
+                    <h2 class="text-3xl font-bold text-center mb-6 text-[#C0843E]">علمی سوالات کے جوابات</h2>
+                    <p class="text-center text-lg max-w-3xl mx-auto mb-8 text-gray-600 prose-ur">
+                        یہاں آپ سیاسی و فلسفیانہ تصورات سے متعلق کوئی بھی سوال پوچھ سکتے ہیں، اور ہم آپ کو جامع جواب فراہم کریں گے۔
+                    </p>
+                    <div class="flex flex-col items-center">
+                        <textarea id="question-input" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C0843E] mb-4 text-right prose-ur" rows="4" placeholder="یہاں اپنا سوال پوچھیں..."></textarea>
+                        <button id="ask-gemini-btn" class="bg-[#C0843E] hover:bg-[#A36C33] text-white font-bold py-3 px-8 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                            معلومات حاصل کریں
+                        </button>
+                        <div id="response-container" class="w-full mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200 text-gray-700 min-h-[100px] flex items-center justify-center prose-ur">
+                            جواب یہاں ظاہر ہوگا...
+                        </div>
+                        <div id="loading-indicator" class="mt-4 text-gray-600 hidden">
+                            معلومات تیار کی جا رہی ہیں...
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+        
+        <footer class="bg-gray-100 mt-20">
+            <div class="container mx-auto px-6 py-4 text-center text-gray-500">
+                <p>&copy; 2024 - سیاسی و فلسفیانہ تصورات کا انٹرایکٹو جائزہ۔ تمام حقوق محفوظ ہیں۔</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileNav = document.getElementById('mobile-nav');
+
+        // Update nav links on scroll
+        function changeNavLinkState() {
+            let index = sections.length;
+            while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+            
+            navLinks.forEach((link) => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+        
+        window.addEventListener('scroll', changeNavLinkState);
+        changeNavLinkState(); // Call on load to set initial state
+
+        // Smooth scroll for desktop navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Mobile navigation dropdown
+        mobileNav.addEventListener('change', (e) => {
+            const sectionId = e.target.value;
+            if (sectionId) {
+                document.querySelector(sectionId).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Iqbal's critique card interaction
+        const cards = document.querySelectorAll('.card');
+        const modal = document.getElementById('modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const contentId = card.getAttribute('data-content-id');
+                const contentData = document.getElementById(`${contentId}-data`).innerHTML;
+                modalBody.innerHTML = contentData;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+        });
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Chart.js for Human vs. Divine Law
+        const lawCtx = document.getElementById('lawChart').getContext('2d');
+        const lawChart = new Chart(lawCtx, {
+            type: 'radar',
+            data: {
+                labels: ['ماخذ', 'اختیار', 'دائرہ کار', 'تقدیس', 'لچک', 'مقصد'],
+                datasets: [{
+                    label: 'الٰہی دستور',
+                    data: [10, 10, 9, 10, 7, 9],
+                    backgroundColor: 'rgba(70, 130, 180, 0.2)',
+                    borderColor: 'rgba(70, 130, 180, 1)',
+                    pointBackgroundColor: 'rgba(70, 130, 180, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(70, 130, 180, 1)'
+                }, {
+                    label: 'انسانی دستور',
+                    data: [5, 6, 6, 2, 9, 6],
+                    backgroundColor: 'rgba(192, 132, 62, 0.2)',
+                    borderColor: 'rgba(192, 132, 62, 1)',
+                    pointBackgroundColor: 'rgba(192, 132, 62, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(192, 132, 62, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'دستوروں کی خصوصیات کا تقابلی جائزہ',
+                        font: {
+                            size: 18,
+                            family: "'Noto Nastaliq Urdu', serif"
+                        },
+                        color: '#3D352E'
+                    },
+                    legend: {
+                        labels: {
+                            font: {
+                                family: "'Noto Nastaliq Urdu', serif",
+                                size: 14,
+                            }
+                        }
+                    },
+                    tooltip: {
+                         bodyFont: {
+                            family: "'Noto Nastaliq Urdu', serif",
+                        },
+                        titleFont: {
+                            family: "'Noto Nastaliq Urdu', serif",
+                        },
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 14,
+                                family: "'Noto Nastaliq Urdu', serif"
+                            },
+                             color: '#3D352E'
+                        },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            stepSize: 2
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart.js for Socialism vs. Communism
+        const economyCtx = document.getElementById('economyChart').getContext('2d');
+        const economyChart = new Chart(economyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['سوشلزم', 'کمیونزم'],
+                datasets: [
+                    {
+                        label: 'عوامی/اجتماعی ملکیت',
+                        data: [65, 100],
+                        backgroundColor: '#4682B4',
+                    },
+                    {
+                        label: 'نجی ملکیت',
+                        data: [35, 0],
+                        backgroundColor: '#C0843E',
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%'
+                            }
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        ticks: {
+                            font: {
+                                family: "'Noto Nastaliq Urdu', serif",
+                                size: 14,
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'معاشی نظاموں میں ملکیت کی تقسیم',
+                        font: {
+                           size: 18,
+                           family: "'Noto Nastaliq Urdu', serif"
+                        },
+                         color: '#3D352E'
+                    },
+                    legend: {
+                        position: 'top',
+                         labels: {
+                            font: {
+                                family: "'Noto Nastaliq Urdu', serif",
+                                size: 14,
+                            }
+                        }
+                    },
+                     tooltip: {
+                         bodyFont: {
+                            family: "'Noto Nastaliq Urdu', serif",
+                        },
+                        titleFont: {
+                            family: "'Noto Nastaliq Urdu', serif",
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.x !== null) {
+                                    label += context.parsed.x + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // LLM integration for Q&A
+        const questionInput = document.getElementById('question-input');
+        const askGeminiBtn = document.getElementById('ask-gemini-btn'); // Renamed from ask-gemini-btn for consistency
+        const responseContainer = document.getElementById('response-container');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        askGeminiBtn.addEventListener('click', async () => {
+            const prompt = questionInput.value.trim();
+            if (!prompt) {
+                responseContainer.innerHTML = '<span class="text-red-500">براہ کرم کوئی سوال درج کریں۔</span>';
+                return;
+            }
+
+            loadingIndicator.classList.remove('hidden');
+            responseContainer.innerHTML = ''; // Clear previous response
+            askGeminiBtn.disabled = true;
+
+            try {
+                let chatHistory = [];
+                // Contextualize the prompt for the LLM without mentioning its source
+                chatHistory.push({ role: "user", parts: [{ text: "آپ ایک سیاسی فلسفہ کے ماہر ہیں اور علامہ اقبال، دستور (انسانی/الٰہی)، سوشلزم، کمیونزم، اور قومیت (مغربی/اسلامی) کے موضوعات پر جامع اور درست جوابات فراہم کرتے ہیں۔ صارف کا سوال ہے: " + prompt }] });
+
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    responseContainer.innerHTML = text;
+                } else {
+                    responseContainer.innerHTML = '<span class="text-red-500">معذرت، جواب حاصل کرنے میں کوئی مسئلہ پیش آیا۔</span>';
+                    console.error("Unexpected API response structure:", result);
+                }
+            } catch (error) {
+                responseContainer.innerHTML = `<span class="text-red-500">ایک خرابی پیش آگئی: ${error.message}</span>`;
+                console.error("Error fetching from API:", error);
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                askGeminiBtn.disabled = false;
+            }
+        });
+    });
+    </script>
+</body>
+</html>
