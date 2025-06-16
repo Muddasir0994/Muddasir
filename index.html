@@ -6,7 +6,7 @@
     <title>سیاسی و فلسفیانہ تصورات کا جائزہ</title>
     
     <!-- Chosen Palette: Scholarly Neutrals -->
-    <!-- Application Structure Plan: A single-page scrolling application with a sticky top navigation bar for easy access to the four main thematic sections. This structure was chosen over a direct report-to-page mapping to create a fluid, exploratory user experience. Each section is designed to be a self-contained module, starting with an introduction and using interactive elements like clickable cards and comparative charts to break down complex information into digestible pieces, facilitating better understanding and engagement. The flow encourages both sequential reading and direct topic exploration. A new "Q&A" section has been added at the end for general inquiries, with modified text to be less explicit about the AI source. -->
+    <!-- Application Structure Plan: A single-page scrolling application with a sticky top navigation bar for easy access to the four main thematic sections. This structure was chosen over a direct report-to-page mapping to create a fluid, exploratory user experience. Each section is designed to be a self-contained module, starting with an introduction and using interactive elements like clickable cards and comparative charts to break down complex information into digestible pieces, facilitating better understanding and and engagement. The flow encourages both sequential reading and direct topic exploration. A new "Q&A" section has been added at the end for general inquiries, with modified text to be less explicit about the AI source. -->
     <!-- Visualization & Content Choices:
         1. Iqbal's Critique: Report Info -> Four key criticisms of democracy. Goal -> Inform/Organize. Viz -> Interactive Cards. Interaction -> Click to reveal details. Justification -> Breaks down a dense argument into clear, manageable parts. Library -> HTML/CSS/JS.
         2. Human vs. Divine Law: Report Info -> Comparison table. Goal -> Compare. Viz -> Radar Chart & Icon-based side-by-side list. Interaction -> Chart tooltips provide instant comparison. Justification -> A radar chart is superior to a table for comparing multiple attributes simultaneously and visually. Library -> Chart.js.
@@ -506,7 +506,7 @@
                 chatHistory.push({ role: "user", parts: [{ text: "آپ ایک سیاسی فلسفہ کے ماہر ہیں اور علامہ اقبال، دستور (انسانی/الٰہی)، سوشلزم، کمیونزم، اور قومیت (مغربی/اسلامی) کے موضوعات پر جامع اور درست جوابات فراہم کرتے ہیں۔ صارف کا سوال ہے: " + prompt }] });
 
                 const payload = { contents: chatHistory };
-                const apiKey = ""; 
+                const apiKey = "AIzaSyAoZnOX3_usN9yYwoPVXcONMznEUz43yLI"; // API key updated here
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
